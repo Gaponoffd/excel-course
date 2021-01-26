@@ -6,10 +6,11 @@ import {Table} from '@/components/table/Table'
 import {createStore} from '@core/createStore'
 import {rootReduser} from '@/redux/rootReduser'
 import {storage} from '@/core/utils'
+import {initialState} from '@/redux/initialState'
 import './sass/index.sass'
 
 
-const store = createStore(rootReduser, storage('excel-state'))
+const store = createStore(rootReduser, initialState)
 
 store.subscribe(state => {
   console.log('App state', state)
@@ -22,4 +23,3 @@ const excel = new Excel('#app', {
 })
 
 excel.render()
-
