@@ -5,7 +5,7 @@ export function shouldResize(event) {
 }
 
 export function isCell(event) {
-  return event.target.dataset.type == 'cell'
+  return event.target.dataset.type === 'cell'
 }
 
 export function matrix($target, $current) {

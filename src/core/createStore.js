@@ -1,6 +1,5 @@
-
-export function createStore(rootReduser, initialState = {}) {
-  let state = rootReduser({...initialState}, {type: '__INIT__'})
+export function createStore(rootReducer, initialState = {}) {
+  let state = rootReducer({...initialState}, {type: '__INIT__'})
   let listeners = []
 
   return {
@@ -13,7 +12,7 @@ export function createStore(rootReduser, initialState = {}) {
       }
     },
     dispatch(action) {
-      state = rootReduser(state, action)
+      state = rootReducer(state, action)
       listeners.forEach(listener => listener(state))
     },
     getState() {
@@ -22,3 +21,4 @@ export function createStore(rootReduser, initialState = {}) {
   }
 }
 
+// Extra Task - Переписать на класс

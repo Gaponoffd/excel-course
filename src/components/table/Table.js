@@ -1,12 +1,12 @@
 import {ExcelComponent} from '@core/ExcelComponent'
+import {$} from '@core/dom'
 import {createTable} from '@/components/table/table.template'
 import {resizeHandler} from '@/components/table/table.resize'
-import {shouldResize, isCell, matrix, nextSelector} from './table.functions'
+import {isCell, matrix, nextSelector, shouldResize} from './table.functions'
 import {TableSelection} from '@/components/table/TableSelection'
-import {$} from '@/core/dom'
 import * as actions from '@/redux/actions'
 import {defaultStyles} from '@/constants'
-import {parse} from '@/core/parse'
+import {parse} from '@core/parse'
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -19,7 +19,7 @@ export class Table extends ExcelComponent {
     })
   }
 
-  toHtml() {
+  toHTML() {
     return createTable(20, this.store.getState())
   }
 
@@ -29,13 +29,13 @@ export class Table extends ExcelComponent {
 
   init() {
     super.init()
+
     this.selectCell(this.$root.find('[data-id="0:0"]'))
 
-    this.$on('Formula:input', value => {
+    this.$on('formula:input', value => {
       this.selection.current
           .attr('data-value', value)
           .text(parse(value))
-      this.selection.current.text(value)
       this.updateTextInStore(value)
     })
 
@@ -57,7 +57,6 @@ export class Table extends ExcelComponent {
     this.$emit('table:select', $cell)
     const styles = $cell.getStyles(Object.keys(defaultStyles))
     this.$dispatch(actions.changeStyles(styles))
-    console.log('styles to dispatch', styles);
   }
 
   async resizeTable(event) {
@@ -93,11 +92,12 @@ export class Table extends ExcelComponent {
       'ArrowDown',
       'ArrowUp'
     ]
+
     const {key} = event
+
     if (keys.includes(key) && !event.shiftKey) {
       event.preventDefault()
       const id = this.selection.current.id(true)
-
       const $next = this.$root.find(nextSelector(key, id))
       this.selectCell($next)
     }
@@ -111,7 +111,6 @@ export class Table extends ExcelComponent {
   }
 
   onInput(event) {
-    // this.$emit('table:input', $(event.target))
     this.updateTextInStore($(event.target).text())
   }
 }

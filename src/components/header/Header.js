@@ -1,16 +1,18 @@
 import {ExcelComponent} from '@core/ExcelComponent'
-import {$} from '@/core/dom'
-import {changesTitle} from '@/redux/actions'
+import {$} from '@core/dom'
+import {changeTitle} from '@/redux/actions'
 import {defaultTitle} from '@/constants'
-import {debounce} from '@/core/utils'
+import {debounce} from '@core/utils'
+import {ActiveRoute} from '@core/routes/ActiveRoute'
+
 export class Header extends ExcelComponent {
   static className = 'excel__header'
 
   constructor($root, options) {
     super($root, {
       name: 'Header',
-      listeners: ['input'],
-      ...options
+      listeners: ['input', 'click'],
+      ...options,
     })
   }
 
@@ -18,23 +20,42 @@ export class Header extends ExcelComponent {
     this.onInput = debounce(this.onInput, 300)
   }
 
-  toHtml() {
+  toHTML() {
     const title = this.store.getState().title || defaultTitle
     return `
-      <input type="text" class="input" value="${title}">
+      <input type="text" class="input" value="${title}" />
+
       <div>
-          <div class="button">
-              <span class="material-icons">delete</span>
-          </div>
-          <div class="button">
-              <span class="material-icons">exit_to_app</span>
-          </div>
+
+        <div class="button" data-button="remove">
+          <i class="material-icons" data-button="remove">delete</i>
+        </div>
+
+        <div class="button" data-button="exit">
+          <i class="material-icons" data-button="exit">exit_to_app</i>
+        </div>
+
       </div>
     `
   }
 
+  onClick(event) {
+    const $target = $(event.target)
+
+    if ($target.data.button === 'remove') {
+      const decision = confirm('Вы уверены?')
+      if (decision) {
+        localStorage.removeItem('excel:' + ActiveRoute.param)
+        ActiveRoute.navigare('')
+      }
+    } else if ($target.data.button === 'exit') {
+      ActiveRoute.navigare('')
+    }
+  }
+
+
   onInput(event) {
     const $target = $(event.target)
-    this.$dispatch(changesTitle($target.text()))
+    this.$dispatch(changeTitle($target.text()))
   }
 }
