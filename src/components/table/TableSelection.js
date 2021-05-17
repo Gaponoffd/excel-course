@@ -1,7 +1,8 @@
 export class TableSelection {
   static className = 'selected'
+
   constructor() {
-    this.group =[]
+    this.group = []
     this.current = null
   }
 
@@ -14,7 +15,7 @@ export class TableSelection {
 
   clear() {
     this.group.forEach($el => $el.removeClass(TableSelection.className))
-    this.group =[]
+    this.group = []
   }
 
   get selectedIds() {

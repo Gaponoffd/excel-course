@@ -21,6 +21,7 @@ export class StoreSubscriber {
           })
         }
       })
+
       this.prevState = this.store.getState()
     })
   }

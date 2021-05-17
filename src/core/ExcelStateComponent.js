@@ -18,4 +18,3 @@ export class ExcelStateComponent extends ExcelComponent {
     this.$root.html(this.template)
   }
 }
-
